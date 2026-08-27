@@ -1,0 +1,31 @@
+{
+  "name": "temporal-ts",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "packageManager": "bun@1.4.0",
+  "description": "A reference template for structuring a Temporal TypeScript orchestration layer",
+  "scripts": {
+    "clean": "bun scripts/clean.ts",
+    "build": "bun run clean && tsc && bun dist/src/orchestration/workflows/example_job/bundle.js",
+    "typecheck": "tsc --noEmit",
+    "lint": "biome lint .",
+    "format": "biome format --write .",
+    "format:check": "biome format .",
+    "test": "bun run build && bun test dist/tests",
+    "check": "bun run typecheck && bun run lint && bun run format:check && bun run test"
+  },
+  "dependencies": {
+    "@temporalio/client": "1.23.0",
+    "@temporalio/common": "1.23.0",
+    "@temporalio/worker": "1.23.0",
+    "@temporalio/workflow": "1.23.0",
+    "zod": "4.4.3"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.5.10",
+    "@temporalio/testing": "1.23.0",
+    "@types/bun": "1.4.0",
+    "typescript": "5.9.3"
+  }
+}
