@@ -18,8 +18,9 @@ type WorkflowExecutionOptions = Readonly<{
 
 export function createWorkflowDefinition<TIn extends ZodModel, TOut extends ZodModel>(
   contract: WorkflowContract<TIn, TOut>,
+  // Infer payload types from the contract alone, then check the implementation against them.
   impl: NoInfer<WorkflowImpl<TIn, TOut>>,
-): (arg: unknown) => Promise<z.output<TOut>> {
+): (rawArg: unknown) => Promise<z.output<TOut>> {
   return async (rawArg: unknown): Promise<z.output<TOut>> => {
     const actualType = workflowInfo().workflowType;
     if (actualType !== contract.name) {

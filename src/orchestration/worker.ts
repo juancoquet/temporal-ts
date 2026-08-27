@@ -9,19 +9,12 @@ export type ActivityImpl<TIn extends ZodModel, TOut extends ZodModel> = (
   arg: z.output<TIn>,
 ) => Promise<z.output<TOut>>;
 
-type SameType<Left, Right> = [Left] extends [Right]
-  ? [Right] extends [Left]
-    ? unknown
-    : never
-  : never;
+type ActivityContractShape = ActivityContract<ZodModel, ZodModel>;
 
-type CongruentActivityImpl<
-  TIn extends ZodModel,
-  TOut extends ZodModel,
-  TImpl extends (...args: never[]) => Promise<unknown>,
-> = TImpl &
-  SameType<Parameters<TImpl>, [arg: z.output<TIn>]> &
-  SameType<Awaited<ReturnType<TImpl>>, z.output<TOut>>;
+type ActivityImplFor<TContract extends ActivityContractShape> = ActivityImpl<
+  TContract["arg"],
+  TContract["out"]
+>;
 
 export type WorkflowWorkerMode = "development" | "production";
 
@@ -38,19 +31,19 @@ export function workflowWorkerModeFromEnvironment(
     : "production";
 }
 
-export async function buildActivityWorker<
-  TIn extends ZodModel,
-  TOut extends ZodModel,
-  TImpl extends (...args: never[]) => Promise<unknown>,
->(
+export async function buildActivityWorker<const TContract extends ActivityContractShape>(
   connection: NativeConnection,
-  contract: ActivityContract<TIn, TOut>,
-  impl: CongruentActivityImpl<TIn, TOut, TImpl>,
+  contract: TContract,
+  // Infer payload types from the contract alone, then check the implementation against them.
+  impl: NoInfer<ActivityImplFor<TContract>>,
 ): Promise<Worker> {
-  const congruentImpl = impl as ActivityImpl<TIn, TOut>;
-  const validatedImpl = async (rawArg: unknown): Promise<z.output<TOut>> => {
-    const arg = parsePayloadOrFail(contract.arg, rawArg, `${contract.name} activity input`);
-    return congruentImpl(arg);
+  const validatedImpl = async (rawArg: unknown): Promise<z.output<TContract["out"]>> => {
+    const arg = parsePayloadOrFail<TContract["arg"]>(
+      contract.arg,
+      rawArg,
+      `${contract.name} activity input`,
+    );
+    return impl(arg);
   };
 
   return Worker.create({

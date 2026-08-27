@@ -20,6 +20,7 @@ src/
     service.ts                 # production service and factory
   orchestration/
     contracts.ts               # ActivityContract / WorkflowContract
+    config.ts                  # shared Temporal address and namespace
     activity.ts                # Workflow-only executeActivity helper
     workflow.ts                # Workflow Definition and child execution helpers
     client.ts                  # Client connection and top-level execution helpers
