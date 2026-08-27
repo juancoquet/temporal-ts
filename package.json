@@ -12,8 +12,8 @@
     "lint": "biome lint .",
     "format": "biome format --write .",
     "format:check": "biome format .",
-    "test": "bun run build && bun test dist/tests",
-    "check": "bun run typecheck && bun run lint && bun run format:check && bun run test"
+    "test": "bun test",
+    "check": "bun run typecheck && bun run lint && bun run format:check"
   },
   "dependencies": {
     "@temporalio/client": "1.23.0",

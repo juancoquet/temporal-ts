@@ -94,7 +94,7 @@ A starter executes a top-level Workflow through its contract:
 const { client, connection } = await connectClient();
 
 try {
-  const request = ExampleRequestSchema.parse({ workId: "doc-1" });
+  const request = ExampleRequestSchema.parse({ work_id: "doc-1" });
   const result = await executeWorkflow(client, EXAMPLE_JOB_WORKFLOW, request);
   console.info(result);
 } finally {
@@ -132,11 +132,12 @@ Install [Bun](https://bun.sh/) 1.4.0, then:
 
 ```bash
 bun install --frozen-lockfile
-bun run check
+bun run check  # TypeScript + Biome lint and formatting
+bun test       # unit and Temporal integration tests
+bun run build  # compile and generate the production Workflow bundle
 ```
 
-The checks run TypeScript 5.9, Biome, a production Workflow bundle build, Bun tests, and a Temporal
-time-skipping end-to-end test. The first end-to-end run may download Temporal's test server.
+The first test run may download Temporal's time-skipping test server.
 
 Run each compiled Worker against a local Temporal development server:
 

@@ -20,11 +20,12 @@ test("malformed Temporal payloads become non-retryable failures", () => {
   const schema = z.object({ value: NonEmptyStringSchema }).readonly();
 
   try {
-    parsePayloadOrFail(schema, { value: " " }, "test input");
+    parsePayloadOrFail(schema, { value: " " });
     throw new Error("expected payload validation to fail");
   } catch (error: unknown) {
     expect(error).toBeInstanceOf(ApplicationFailure);
     expect((error as ApplicationFailure).nonRetryable).toBeTrue();
-    expect((error as ApplicationFailure).type).toBe("PayloadValidationFailure");
+    expect((error as ApplicationFailure).type).toBe("ValidationError");
+    expect((error as ApplicationFailure).message).toBe("Payload validation failed");
   }
 });

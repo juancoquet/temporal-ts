@@ -16,5 +16,5 @@ export async function executeActivity<TIn extends ZodModel, TOut extends ZodMode
     startToCloseTimeout: contract.startToClose,
   });
   const result = await activities[contract.name](arg);
-  return parsePayloadOrFail(contract.out, result, `${contract.name} activity output`);
+  return parsePayloadOrFail(contract.out, result);
 }

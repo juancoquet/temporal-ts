@@ -38,11 +38,7 @@ export async function buildActivityWorker<const TContract extends ActivityContra
   impl: NoInfer<ActivityImplFor<TContract>>,
 ): Promise<Worker> {
   const validatedImpl = async (rawArg: unknown): Promise<z.output<TContract["out"]>> => {
-    const arg = parsePayloadOrFail<TContract["arg"]>(
-      contract.arg,
-      rawArg,
-      `${contract.name} activity input`,
-    );
+    const arg = parsePayloadOrFail<TContract["arg"]>(contract.arg, rawArg);
     return impl(arg);
   };
 

@@ -30,9 +30,9 @@ export function createWorkflowDefinition<TIn extends ZodModel, TOut extends ZodM
       );
     }
 
-    const arg = parsePayloadOrFail(contract.arg, rawArg, `${contract.name} workflow input`);
+    const arg = parsePayloadOrFail(contract.arg, rawArg);
     const result = await impl(arg);
-    return parsePayloadOrFail(contract.out, result, `${contract.name} workflow output`);
+    return parsePayloadOrFail(contract.out, result);
   };
 }
 
@@ -47,5 +47,5 @@ export async function executeChildWorkflow<TIn extends ZodModel, TOut extends Zo
     taskQueue: contract.queue,
     workflowExecutionTimeout: contract.executionTimeout,
   });
-  return parsePayloadOrFail(contract.out, result, `${contract.name} child workflow output`);
+  return parsePayloadOrFail(contract.out, result);
 }

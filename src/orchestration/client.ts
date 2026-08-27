@@ -3,6 +3,7 @@ import type { z } from "zod";
 import type { ZodModel } from "../primitives.ts";
 import { TEMPORAL_ADDRESS, TEMPORAL_NAMESPACE } from "./config.ts";
 import type { WorkflowContract } from "./contracts.ts";
+import { parsePayloadOrFail } from "./failures.ts";
 import type { WorkflowFn } from "./workflow.ts";
 
 type WorkflowExecutionOptions = Readonly<{
@@ -34,5 +35,5 @@ export async function executeWorkflow<TIn extends ZodModel, TOut extends ZodMode
     taskQueue: contract.queue,
     workflowExecutionTimeout: contract.executionTimeout,
   });
-  return contract.out.parse(result);
+  return parsePayloadOrFail(contract.out, result);
 }

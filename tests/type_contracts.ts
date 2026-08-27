@@ -42,7 +42,7 @@ void buildActivityWorker(connection, EXAMPLE_PLAN_ACTIVITY, extraParameterActivi
 createWorkflowDefinition(
   EXAMPLE_JOB_WORKFLOW,
   async (request: ExampleRequest): Promise<ExampleResult> => ({
-    workId: request.workId,
+    work_id: request.work_id,
     index: 0,
   }),
 );
