@@ -10,5 +10,5 @@ export default async function malformedActivityInput(): Promise<void> {
     startToCloseTimeout: EXAMPLE_PLAN_ACTIVITY.startToClose,
     retry: { maximumAttempts: 2 },
   });
-  await activities[ActivityName.EXAMPLE_PLAN]({ work_id: " " });
+  await activities[ActivityName.EXAMPLE_PLAN]({ workId: " " });
 }

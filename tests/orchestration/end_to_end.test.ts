@@ -28,7 +28,7 @@ test("the example Workflow runs through its dedicated production Workers", async
         EXAMPLE_JOB_WORKFLOW,
         { workflowBundle: { codePath: bundlePath } },
       );
-      const request = ExampleRequestSchema.parse({ work_id: "doc-1" });
+      const request = ExampleRequestSchema.parse({ workId: "doc-1" });
       const execution = executeWorkflow(environment.client, EXAMPLE_JOB_WORKFLOW, request);
 
       const [result] = await Promise.all([
@@ -37,7 +37,7 @@ test("the example Workflow runs through its dedicated production Workers", async
         processWorker.runUntil(execution),
       ]);
 
-      expect(String(result.work_id)).toBe("doc-1");
+      expect(String(result.workId)).toBe("doc-1");
       expect(result.index).toBe(2);
       expect(Object.isFrozen(result)).toBeTrue();
     } finally {

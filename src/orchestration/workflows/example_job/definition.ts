@@ -12,6 +12,6 @@ export default createWorkflowDefinition(
     for (const item of plan.items) {
       await executeActivity(EXAMPLE_PROCESS_ACTIVITY, item);
     }
-    return { work_id: request.work_id, index: plan.items.length };
+    return { workId: request.workId, index: plan.items.length };
   },
 );

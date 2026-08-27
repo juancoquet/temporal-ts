@@ -5,14 +5,14 @@ const IntegerSchema = z.preprocess(coerceInteger, z.number().int());
 
 export const ExampleRequestSchema = z
   .object({
-    work_id: NonEmptyStringSchema,
+    workId: NonEmptyStringSchema,
   })
   .readonly();
 export type ExampleRequest = z.output<typeof ExampleRequestSchema>;
 
 export const ExampleItemSchema = z
   .object({
-    work_id: NonEmptyStringSchema,
+    workId: NonEmptyStringSchema,
     index: IntegerSchema,
   })
   .readonly();
@@ -27,7 +27,7 @@ export type ExamplePlan = z.output<typeof ExamplePlanSchema>;
 
 export const ExampleResultSchema = z
   .object({
-    work_id: NonEmptyStringSchema,
+    workId: NonEmptyStringSchema,
     index: IntegerSchema,
   })
   .readonly();

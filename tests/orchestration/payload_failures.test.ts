@@ -24,7 +24,7 @@ test("malformed Workflow input fails non-retryably", async () => {
       environment.client.workflow.execute<(arg: unknown) => Promise<unknown>>(
         EXAMPLE_JOB_WORKFLOW.name,
         {
-          args: [{ work_id: " " }],
+          args: [{ workId: " " }],
           workflowId: "malformed-workflow-input",
           taskQueue: EXAMPLE_JOB_WORKFLOW.queue,
           retry: { maximumAttempts: 3 },
@@ -75,7 +75,7 @@ test("malformed Activity output fails its calling Workflow non-retryably", async
   const environment = await TestWorkflowEnvironment.createTimeSkipping();
   try {
     const malformedActivity = async (item: ExampleItem): Promise<ExampleResult> =>
-      ({ work_id: item.work_id, index: "invalid" }) as unknown as ExampleResult;
+      ({ workId: item.workId, index: "invalid" }) as unknown as ExampleResult;
     const activityWorker = await buildActivityWorker(
       environment.nativeConnection,
       EXAMPLE_PROCESS_ACTIVITY,
@@ -110,7 +110,7 @@ test("malformed Workflow output fails non-retryably before completion", async ()
     const worker = await buildWorkflowWorker(environment.nativeConnection, EXAMPLE_JOB_WORKFLOW, {
       workflowsPath: testWorkflowPath("malformed_workflow_output"),
     });
-    const request = ExampleRequestSchema.parse({ work_id: "doc-1" });
+    const request = ExampleRequestSchema.parse({ workId: "doc-1" });
     const execution = captureApplicationFailure(
       environment.client.workflow.execute(EXAMPLE_JOB_WORKFLOW.name, {
         args: [request],
@@ -132,7 +132,7 @@ test("the Client translates an unchecked malformed Workflow result", async () =>
     const worker = await buildWorkflowWorker(environment.nativeConnection, EXAMPLE_JOB_WORKFLOW, {
       workflowsPath: testWorkflowPath("unchecked_workflow_output"),
     });
-    const request = ExampleRequestSchema.parse({ work_id: "doc-1" });
+    const request = ExampleRequestSchema.parse({ workId: "doc-1" });
     const execution = captureApplicationFailure(
       executeWorkflow(environment.client, EXAMPLE_JOB_WORKFLOW, request, {
         workflowId: "unchecked-workflow-output",

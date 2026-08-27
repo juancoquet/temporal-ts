@@ -94,7 +94,7 @@ A starter executes a top-level Workflow through its contract:
 const { client, connection } = await connectClient();
 
 try {
-  const request = ExampleRequestSchema.parse({ work_id: "doc-1" });
+  const request = ExampleRequestSchema.parse({ workId: "doc-1" });
   const result = await executeWorkflow(client, EXAMPLE_JOB_WORKFLOW, request);
   console.info(result);
 } finally {
