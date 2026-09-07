@@ -1,0 +1,8 @@
+{
+  "name": "example-process-activity",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "ky": "1.13.0"
+  }
+}

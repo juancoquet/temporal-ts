@@ -1,0 +1,8 @@
+{
+  "name": "example-plan-activity",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "graphology": "0.26.0"
+  }
+}
