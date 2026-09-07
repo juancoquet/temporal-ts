@@ -11,12 +11,13 @@ import { createWorkflowDefinition } from "../src/orchestration/workflow.ts";
 import { EXAMPLE_JOB_WORKFLOW } from "../src/orchestration/workflows/example_job/contract.ts";
 
 declare const connection: NativeConnection;
+declare const namespace: string;
 
 const correctActivity: ActivityImpl<
   typeof EXAMPLE_PLAN_ACTIVITY.arg,
   typeof EXAMPLE_PLAN_ACTIVITY.out
 > = async (_request: ExampleRequest): Promise<ExamplePlan> => ({ items: [] });
-void buildActivityWorker(connection, EXAMPLE_PLAN_ACTIVITY, correctActivity);
+void buildActivityWorker(connection, namespace, EXAMPLE_PLAN_ACTIVITY, correctActivity);
 
 const wrongActivity: ActivityImpl<
   typeof ExampleItemSchema,
@@ -30,14 +31,14 @@ type PlanActivity = ActivityImpl<
 const mismatchedActivity: PlanActivity = wrongActivity;
 void mismatchedActivity;
 // @ts-expect-error The Worker builder rejects an incongruent implementation.
-void buildActivityWorker(connection, EXAMPLE_PLAN_ACTIVITY, wrongActivity);
+void buildActivityWorker(connection, namespace, EXAMPLE_PLAN_ACTIVITY, wrongActivity);
 
 const extraParameterActivity = async (
   _request: ExampleRequest,
   _dependency: string,
 ): Promise<ExamplePlan> => ({ items: [] });
 // @ts-expect-error Activity implementations must accept exactly one argument.
-void buildActivityWorker(connection, EXAMPLE_PLAN_ACTIVITY, extraParameterActivity);
+void buildActivityWorker(connection, namespace, EXAMPLE_PLAN_ACTIVITY, extraParameterActivity);
 
 createWorkflowDefinition(
   EXAMPLE_JOB_WORKFLOW,
