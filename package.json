@@ -5,6 +5,10 @@
   "type": "module",
   "packageManager": "bun@1.4.0",
   "description": "A reference template for structuring a Temporal TypeScript orchestration layer",
+  "workspaces": [
+    "src/orchestration/activities/*",
+    "src/orchestration/workflows/*"
+  ],
   "scripts": {
     "clean": "bun scripts/clean.ts",
     "build": "bun run clean && tsc && bun dist/src/orchestration/workflows/example_job/bundle.js",
@@ -13,7 +17,9 @@
     "format": "biome format --write .",
     "format:check": "biome format .",
     "test": "bun test",
-    "check": "bun run typecheck && bun run lint && bun run format:check"
+    "check": "bun run typecheck && bun run lint && bun run format:check",
+    "compose:up": "docker buildx bake --load && docker compose up",
+    "compose:down": "docker compose down"
   },
   "dependencies": {
     "@temporalio/client": "1.23.0",

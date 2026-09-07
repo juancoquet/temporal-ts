@@ -33,6 +33,7 @@ export function workflowWorkerModeFromEnvironment(
 
 export async function buildActivityWorker<const TContract extends ActivityContractShape>(
   connection: NativeConnection,
+  namespace: string,
   contract: TContract,
   // Infer payload types from the contract alone, then check the implementation against them.
   impl: NoInfer<ActivityImplFor<TContract>>,
@@ -44,6 +45,7 @@ export async function buildActivityWorker<const TContract extends ActivityContra
 
   return Worker.create({
     connection,
+    namespace,
     taskQueue: contract.queue,
     activities: { [contract.name]: validatedImpl },
   });
@@ -51,11 +53,13 @@ export async function buildActivityWorker<const TContract extends ActivityContra
 
 export async function buildWorkflowWorker<TIn extends ZodModel, TOut extends ZodModel>(
   connection: NativeConnection,
+  namespace: string,
   contract: WorkflowContract<TIn, TOut>,
   workflowCode: WorkflowCode,
 ): Promise<Worker> {
   return Worker.create({
     connection,
+    namespace,
     taskQueue: contract.queue,
     ...workflowCode,
   });

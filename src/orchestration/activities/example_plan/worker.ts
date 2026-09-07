@@ -3,6 +3,6 @@ import { buildActivityWorker } from "../../worker.ts";
 import { EXAMPLE_PLAN_ACTIVITY } from "./contract.ts";
 import { examplePlan } from "./definition.ts";
 
-export function buildWorker(connection: NativeConnection): Promise<Worker> {
-  return buildActivityWorker(connection, EXAMPLE_PLAN_ACTIVITY, examplePlan);
+export function buildWorker(connection: NativeConnection, namespace: string): Promise<Worker> {
+  return buildActivityWorker(connection, namespace, EXAMPLE_PLAN_ACTIVITY, examplePlan);
 }

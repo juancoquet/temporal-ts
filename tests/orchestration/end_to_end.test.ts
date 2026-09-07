@@ -21,10 +21,11 @@ test("the example Workflow runs through its dedicated production Workers", async
 
     const environment = await TestWorkflowEnvironment.createTimeSkipping();
     try {
-      const planWorker = await buildPlanWorker(environment.nativeConnection);
-      const processWorker = await buildProcessWorker(environment.nativeConnection);
+      const planWorker = await buildPlanWorker(environment.nativeConnection, "default");
+      const processWorker = await buildProcessWorker(environment.nativeConnection, "default");
       const jobWorker = await buildWorkflowWorker(
         environment.nativeConnection,
+        "default",
         EXAMPLE_JOB_WORKFLOW,
         { workflowBundle: { codePath: bundlePath } },
       );

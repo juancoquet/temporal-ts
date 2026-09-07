@@ -8,11 +8,12 @@ const bundlePath = compiledSiblingPath(import.meta.url, "workflow-bundle");
 
 export function buildWorker(
   connection: NativeConnection,
+  namespace: string,
   mode: WorkflowWorkerMode,
 ): Promise<Worker> {
   const workflowCode =
     mode === "development"
       ? { workflowsPath: definitionPath }
       : { workflowBundle: { codePath: bundlePath } };
-  return buildWorkflowWorker(connection, EXAMPLE_JOB_WORKFLOW, workflowCode);
+  return buildWorkflowWorker(connection, namespace, EXAMPLE_JOB_WORKFLOW, workflowCode);
 }

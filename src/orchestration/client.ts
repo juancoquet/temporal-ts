@@ -1,7 +1,7 @@
 import { Client, Connection } from "@temporalio/client";
 import type { z } from "zod";
 import type { ZodModel } from "../primitives.ts";
-import { TEMPORAL_ADDRESS, TEMPORAL_NAMESPACE } from "./config.ts";
+import { loadTemporalConnection, type TemporalConnection } from "./config.ts";
 import type { WorkflowContract } from "./contracts.ts";
 import { parsePayloadOrFail } from "./failures.ts";
 import type { WorkflowFn } from "./workflow.ts";
@@ -15,11 +15,13 @@ export type ConnectedClient = Readonly<{
   connection: Connection;
 }>;
 
-export async function connectClient(): Promise<ConnectedClient> {
-  const connection = await Connection.connect({ address: TEMPORAL_ADDRESS });
+export async function connectClient(
+  config: TemporalConnection = loadTemporalConnection(),
+): Promise<ConnectedClient> {
+  const connection = await Connection.connect({ address: config.target });
   return {
     connection,
-    client: new Client({ connection, namespace: TEMPORAL_NAMESPACE }),
+    client: new Client({ connection, namespace: config.namespace }),
   };
 }
 

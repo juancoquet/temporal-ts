@@ -1,0 +1,49 @@
+name: temporal-ts-local-dev
+
+services:
+  temporal:
+    image: temporalio/temporal:${TEMPORAL_VERSION:-1.8.3}
+    command: server start-dev --ip 0.0.0.0 --db-filename /home/temporal/temporal.db
+    ports:
+      - 7233:7233
+      - 8233:8233
+    volumes:
+      - temporal-data:/home/temporal
+    healthcheck:
+      test: ["CMD", "temporal", "operator", "cluster", "health", "--address", "localhost:7233"]
+      interval: 2s
+      timeout: 2s
+      retries: 30
+
+  example-job:
+    image: ${IMAGE_PREFIX:-temporal-ts}/example-job:${IMAGE_TAG:-local}
+    init: true
+    environment:
+      TEMPORAL_TARGET: temporal:7233
+      TEMPORAL_NAMESPACE: default
+    depends_on:
+      temporal:
+        condition: service_healthy
+
+  example-plan:
+    image: ${IMAGE_PREFIX:-temporal-ts}/example-plan:${IMAGE_TAG:-local}
+    init: true
+    environment:
+      TEMPORAL_TARGET: temporal:7233
+      TEMPORAL_NAMESPACE: default
+    depends_on:
+      temporal:
+        condition: service_healthy
+
+  example-process:
+    image: ${IMAGE_PREFIX:-temporal-ts}/example-process:${IMAGE_TAG:-local}
+    init: true
+    environment:
+      TEMPORAL_TARGET: temporal:7233
+      TEMPORAL_NAMESPACE: default
+    depends_on:
+      temporal:
+        condition: service_healthy
+
+volumes:
+  temporal-data:

@@ -17,9 +17,12 @@ const MALFORMED_ACTIVITY_OUTPUT_WORKFLOW = "malformed_activity_output_workflow";
 test("malformed Workflow input fails non-retryably", async () => {
   const environment = await TestWorkflowEnvironment.createTimeSkipping();
   try {
-    const worker = await buildWorkflowWorker(environment.nativeConnection, EXAMPLE_JOB_WORKFLOW, {
-      workflowsPath: exampleWorkflowDefinitionPath(),
-    });
+    const worker = await buildWorkflowWorker(
+      environment.nativeConnection,
+      "default",
+      EXAMPLE_JOB_WORKFLOW,
+      { workflowsPath: exampleWorkflowDefinitionPath() },
+    );
     const execution = captureApplicationFailure(
       environment.client.workflow.execute<(arg: unknown) => Promise<unknown>>(
         EXAMPLE_JOB_WORKFLOW.name,
@@ -42,7 +45,7 @@ test("malformed Workflow input fails non-retryably", async () => {
 test("malformed Activity input fails non-retryably", async () => {
   const environment = await TestWorkflowEnvironment.createTimeSkipping();
   try {
-    const activityWorker = await buildPlanWorker(environment.nativeConnection);
+    const activityWorker = await buildPlanWorker(environment.nativeConnection, "default");
     const workflowWorker = await Worker.create({
       connection: environment.nativeConnection,
       taskQueue: `${MALFORMED_ACTIVITY_INPUT_WORKFLOW}_queue`,
@@ -78,6 +81,7 @@ test("malformed Activity output fails its calling Workflow non-retryably", async
       ({ workId: item.workId, index: "invalid" }) as unknown as ExampleResult;
     const activityWorker = await buildActivityWorker(
       environment.nativeConnection,
+      "default",
       EXAMPLE_PROCESS_ACTIVITY,
       malformedActivity,
     );
@@ -107,9 +111,12 @@ test("malformed Activity output fails its calling Workflow non-retryably", async
 test("malformed Workflow output fails non-retryably before completion", async () => {
   const environment = await TestWorkflowEnvironment.createTimeSkipping();
   try {
-    const worker = await buildWorkflowWorker(environment.nativeConnection, EXAMPLE_JOB_WORKFLOW, {
-      workflowsPath: testWorkflowPath("malformed_workflow_output"),
-    });
+    const worker = await buildWorkflowWorker(
+      environment.nativeConnection,
+      "default",
+      EXAMPLE_JOB_WORKFLOW,
+      { workflowsPath: testWorkflowPath("malformed_workflow_output") },
+    );
     const request = ExampleRequestSchema.parse({ workId: "doc-1" });
     const execution = captureApplicationFailure(
       environment.client.workflow.execute(EXAMPLE_JOB_WORKFLOW.name, {
@@ -129,9 +136,12 @@ test("malformed Workflow output fails non-retryably before completion", async ()
 test("the Client translates an unchecked malformed Workflow result", async () => {
   const environment = await TestWorkflowEnvironment.createTimeSkipping();
   try {
-    const worker = await buildWorkflowWorker(environment.nativeConnection, EXAMPLE_JOB_WORKFLOW, {
-      workflowsPath: testWorkflowPath("unchecked_workflow_output"),
-    });
+    const worker = await buildWorkflowWorker(
+      environment.nativeConnection,
+      "default",
+      EXAMPLE_JOB_WORKFLOW,
+      { workflowsPath: testWorkflowPath("unchecked_workflow_output") },
+    );
     const request = ExampleRequestSchema.parse({ workId: "doc-1" });
     const execution = captureApplicationFailure(
       executeWorkflow(environment.client, EXAMPLE_JOB_WORKFLOW, request, {

@@ -1,12 +1,13 @@
 import { NativeConnection } from "@temporalio/worker";
-import { TEMPORAL_ADDRESS } from "../../config.ts";
+import { loadTemporalConnection } from "../../config.ts";
 import { workflowWorkerModeFromEnvironment } from "../../worker.ts";
 import { buildWorker } from "./worker.ts";
 
 async function serve(): Promise<void> {
-  const connection = await NativeConnection.connect({ address: TEMPORAL_ADDRESS });
+  const { target, namespace } = loadTemporalConnection();
+  const connection = await NativeConnection.connect({ address: target });
   try {
-    const worker = await buildWorker(connection, workflowWorkerModeFromEnvironment());
+    const worker = await buildWorker(connection, namespace, workflowWorkerModeFromEnvironment());
     console.info("starting example-job workflow worker");
     await worker.run();
   } finally {
