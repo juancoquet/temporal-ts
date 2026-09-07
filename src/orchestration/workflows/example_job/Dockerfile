@@ -18,7 +18,7 @@ FROM worker-base
 
 COPY src/orchestration/workflows/example_job/package.json src/orchestration/workflows/example_job/package.json
 RUN --mount=type=cache,target=/root/.bun/install/cache \
-    bun install --filter temporal-ts --filter example-job-workflow --production --frozen-lockfile
+    bun install --filter example-job-workflow --production --frozen-lockfile
 
 COPY --from=build --chown=app:app /app/dist ./dist
 

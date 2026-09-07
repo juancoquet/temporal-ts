@@ -4,7 +4,7 @@ FROM worker-base
 
 COPY src/orchestration/activities/example_plan/package.json src/orchestration/activities/example_plan/package.json
 RUN --mount=type=cache,target=/root/.bun/install/cache \
-    bun install --filter temporal-ts --filter example-plan-activity --production --frozen-lockfile
+    bun install --filter example-plan-activity --production --frozen-lockfile
 
 COPY --chown=app:app src ./src
 
